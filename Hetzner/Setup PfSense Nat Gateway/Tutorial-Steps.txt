@@ -1,0 +1,95 @@
+1- Login to Hetzner cloud console
+2- Create your new project
+3- Go to "Network"
+4- Create Your Network
+    - 10.10.0.0/16 <-- Can be anything you feel valid, but keep in mind IPs in the steps are to be changed accordingly.
+5- Enter the newly created network, and create your subnets, My preferred is 3 subnets (App, Data and Public. can be as many as you like though)
+    - 10.10.10.0/24  <-- Apps Subnet
+    - 10.10.20.0/24  <-- Data Subnet
+    - 10.10.100.0/24  <-- Public Subnet
+6- Go to servers and create a new server with public IP (Can be any O.S for now)
+    - Server MUST be of CX Family, CPX Family for some reason does not detect HDD when setting up PfSense.
+    - Preferred Type CX21 (2 CPU, 4GB Memory)
+    - If you do not plan on setting up A VPN solution on it, Use CX11 (1 CPU, 2GB Memory)
+    - Remove IPv6 Public
+    - Name The server Something Meaningful (PfSense-Gateway)
+    - Take A Note of the public IP.
+7- Go back to network, And Attach it to the Public Subnet
+    - Assign it a static IP (10.10.100.250)
+8- Go Back to the created server, ISO Images tab, Search and mount pfSense CE 2.7.0 (amd64)
+9- Enter Console, Click on Ctrl+Alt+Del, This will reboot the server and Boot the iso, Wait for it to complete booting
+10- Do The Setup with the following steps
+    - Accept Copyright Notice
+    - Select Install
+    - Select Manual
+    - Delete Partitions and Partitions Table (Press D on first device - da0)
+    - Create (With C)
+    - Select GPT
+    - Create Again - To create the partitions, First one was for partition table.
+    - First Partition:
+        Type: freebsd-boot
+        size: 512kb
+        Mountpoint And Label leave Empty
+    - Second Partition:
+        Type: freebsd-swap
+        size: 1-2Gb (2 if you want to run vpn solution later on)
+        Mountpoint And Label leave Empty
+    - 3rd Partition:
+        Type: freebsd-ufs
+        size: The remaining Disk Space (36GB in my case)
+        Mountpoint: /
+        Lable: Empty
+    - Finish And Commit! This will start the setup, Once done you should have a working install of PfSense on the machine.
+    - Unmount the Iso Image from Cloud Console
+    - Ctrl+Alt+Del in console.
+    - Wait For Boot To Finish, And Do the current Steps Afterwards
+        - Should VLANs be set up now: n
+        - Enter the WAN interface name or 'a' for Auto Detection: vtnet0
+        - Enter the LAN interface name or 'a' for Auto Detection: Leave Empty
+        - do you want to proceed: y
+- Wait for everything to finish, Then open browser to the Public IP
+- Bypass the SSL/Security Warning in browser and login with "admin/pfsense"
+- Change the admin password ASAP
+- On Hetzner Cloud Console/Networks/Your Network Go to routes Tab and add the following route
+    - Destination: 0.0.0.0/0
+    - Gateway: PfSense Private IP/Server
+
+All The Remaining work should be on the PfSense Web GUI :)
+
+- Allow Public Access For HTTP And HTTPS (Can be remove later on, but for now we need to maintain access after enabling LAN interface)
+    - Firewall -> Rules -> Wan
+    - Add:
+        Keep Everything As Is And Edit Only "Destination"
+        Destination Port Range: HTTP
+        Save
+    - Add:
+        Keep Everything As Is And Edit Only "Destination"
+        Destination Port Range: HTTPS
+        Save
+    Apply Changes
+
+- Add And Enable LAN Interface
+    Interfaces -> Assignments
+        - Click Add On vtnet1 Then Save
+    Interfaces -> LAN
+        - Enable interface
+        - IPv4 Configuration Type: DHCP
+        Leave everything else as is,save and apply changes
+
+- Disable hardware checksum offload
+    System -> Advanced -> Networking
+    - Network Interfaces Section, Activate "Disable hardware checksum offload", Save And Reboot PfSense
+
+After Reboot Is Done
+- Enabling/Editing Nat
+    - Firewall -> NAT -> Outbound
+        - Set NAT Mode to "Hybrid"
+        - Create A New Mapping Rule
+            Edit "Source":
+                Type: Network
+                Source network for the outbound NAT mapping: 10.10.0.0/16 (Hetzner Network Subent)
+                Leave Everything As Is, Save And Apply Changes
+
+You are Now Done! You can remove the public access rules from WAN in firewall if you want to, or customize your setup with extra stuff you need.
+
+    
