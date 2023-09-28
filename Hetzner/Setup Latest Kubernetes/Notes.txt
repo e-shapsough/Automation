@@ -1,0 +1,10 @@
+- Those files Will setup Kubernetes On Ubuntu 22.04 On Hetzner
+- You still need to init the cluster, join nodes, setup ingress, storage .....
+- Once Tutorials/Automation scripts for those are created, you will find them in this repo
+
+- 3 files exists for init scripts
+    1- File for public IP servers (CX + CPX)
+    2- File for setup with pFsense NAT Gateway for CPX -> "https://github.com/e-shapsough/Automation/tree/main/Hetzner/Setup%20PfSense%20Nat%20Gateway"
+    3- File for setup with pFsense NAT Gateway for CX -> "https://github.com/e-shapsough/Automation/tree/main/Hetzner/Setup%20PfSense%20Nat%20Gateway"
+
+You do not need to run the init script for Server Connectivity on NAT from "https://github.com/e-shapsough/Automation/tree/main/Hetzner/Server%20Config%20To%20Use%20NAT%20Gateway" if you opt to use it from here.
