@@ -1,4 +1,4 @@
-Assuming you did the NAT gateway setup using this github repo tutorials, So IPs used will be the same, Can be changed if other config is used.
+Assuming you did the NAT gateway setup using this github repo tutorials (https://github.com/e-shapsough/Automation/tree/main/Hetzner/Setup%20PfSense%20Nat%20Gateway), So IPs used will be the same, Can be changed if other config is used.
 *** This is only for ubuntu 22.04, mostly works on ubuntu 20.04 and debian
 - Create The Server, Granting only Private IP
 - Access the Server via ssh (if you have a VPN setup or if you have a jump box)
