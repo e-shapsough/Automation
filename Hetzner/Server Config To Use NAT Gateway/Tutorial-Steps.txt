@@ -1,0 +1,29 @@
+Assuming you did the NAT gateway setup using this github repo tutorials, So IPs used will be the same, Can be changed if other config is used.
+*** This is only for ubuntu 22.04, mostly works on ubuntu 20.04 and debian
+- Create The Server, Granting only Private IP
+- Access the Server via ssh (if you have a VPN setup or if you have a jump box)
+    If no VPN or jump box, use console access from Hetzner cloud console.
+- Create /etc/netplan/51-netcfg.yaml
+    - With The Following Content
+-----------------------------------
+network:
+  version: 2
+  ethernets:
+    enp7s0:
+      dhcp4: true
+      dhcp4-overrides:
+        use-dns: false
+      nameservers:
+        addresses: [8.8.8.8, 8.8.4.4]
+      routes:
+      - to: 0.0.0.0/0
+        via: 10.100.0.1
+-----------------------------------
+*** enp7s0:   <--- is for CPX Type
+*** ens10: <--- is for CX type
+*** 10.100.0.1 <--- Your network Gateway (The first IP of the network)
+
+- Run the command "netplan apply"
+- Done!
+
+*** You can also use the init script that matches your instance type, The script provided in this same repo. This also installs some packages and updates to the base system.
