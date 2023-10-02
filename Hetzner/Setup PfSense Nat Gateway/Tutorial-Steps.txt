@@ -77,7 +77,7 @@ All The Remaining work should be on the PfSense Web GUI :)
         Leave everything else as is,save and apply changes
 - UnBlock private network On Wan
     Interfaces -> WAN
-        - Check The last 2 boxeds (Block bogon networks + Block private networks and loopback addresses), Save And Apply
+        - UnCheck The last 2 boxeds (Block bogon networks + Block private networks and loopback addresses), Save And Apply
 
 - Disable hardware checksum offload
     System -> Advanced -> Networking
