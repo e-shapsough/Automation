@@ -15,7 +15,7 @@
     - Name The server Something Meaningful (PfSense-Gateway)
     - Take A Note of the public IP.
 7- Go back to network, And Attach it to the Public Subnet
-    - Assign it a static IP (10.10.100.250)
+    - Assign it a static IP (10.100.100.250)
 8- Go Back to the created server, ISO Images tab, Search and mount pfSense CE 2.7.0 (amd64)
 9- Enter Console, Click on Ctrl+Alt+Del, This will reboot the server and Boot the iso, Wait for it to complete booting
 10- Do The Setup with the following steps
