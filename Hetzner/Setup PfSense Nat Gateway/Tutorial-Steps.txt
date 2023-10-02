@@ -98,6 +98,11 @@ After Reboot Is Done
                 Type: Network
                 Source network for the outbound NAT mapping: 10.100.0.0/16 (Hetzner Network Subent)
                 Leave Everything As Is, Save And Apply Changes
+- Last Firewall Fix
+    - Firewall -> Rules -> Lan
+        Edit The 2 Default rules
+             Destination: any
+        Save And Apply
 
 You are Now Done! You can remove the public access rules from WAN in firewall if you want to, or customize your setup with extra stuff you need.
 
