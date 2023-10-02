@@ -4,9 +4,9 @@
 4- Create Your Network
     - 10.10.0.0/16 <-- Can be anything you feel valid, but keep in mind IPs in the steps are to be changed accordingly.
 5- Enter the newly created network, and create your subnets, My preferred is 3 subnets (App, Data and Public. can be as many as you like though)
-    - 10.10.10.0/24  <-- Apps Subnet
-    - 10.10.20.0/24  <-- Data Subnet
-    - 10.10.100.0/24  <-- Public Subnet
+    - 10.100.10.0/24  <-- Apps Subnet
+    - 10.100.20.0/24  <-- Data Subnet
+    - 10.100.100.0/24  <-- Public Subnet
 6- Go to servers and create a new server with public IP (Can be any O.S for now)
     - Server MUST be of CX Family, CPX Family for some reason does not detect HDD when setting up PfSense.
     - Preferred Type CX21 (2 CPU, 4GB Memory)
