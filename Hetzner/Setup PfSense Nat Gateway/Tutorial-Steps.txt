@@ -88,7 +88,7 @@ After Reboot Is Done
 - Add Static Route
     - System -> Routing -> Static Routes
         - Destination network: 10.100.0.0/16 (Hetzner Network)
-        - Gateway: 10.100.0.1 (Hetzner Network First IP)
+        - Gateway: 10.100.0.1 (Hetzner Network First IP/Lan Gateway)
 
 - Enabling/Editing Nat
     - Firewall -> NAT -> Outbound
