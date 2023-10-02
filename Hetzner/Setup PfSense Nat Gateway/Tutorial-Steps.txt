@@ -75,6 +75,9 @@ All The Remaining work should be on the PfSense Web GUI :)
         - Enable interface
         - IPv4 Configuration Type: DHCP
         Leave everything else as is,save and apply changes
+- UnBlock private network On Wan
+    Interfaces -> WAN
+        - Check The last 2 boxeds (Block bogon networks + Block private networks and loopback addresses), Save And Apply
 
 - Disable hardware checksum offload
     System -> Advanced -> Networking
