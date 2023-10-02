@@ -2,7 +2,7 @@
 2- Create your new project
 3- Go to "Network"
 4- Create Your Network
-    - 10.10.0.0/16 <-- Can be anything you feel valid, but keep in mind IPs in the steps are to be changed accordingly.
+    - 10.100.0.0/16 <-- Can be anything you feel valid, but keep in mind IPs in the steps are to be changed accordingly.
 5- Enter the newly created network, and create your subnets, My preferred is 3 subnets (App, Data and Public. can be as many as you like though)
     - 10.100.10.0/24  <-- Apps Subnet
     - 10.100.20.0/24  <-- Data Subnet
@@ -87,7 +87,7 @@ After Reboot Is Done
         - Create A New Mapping Rule
             Edit "Source":
                 Type: Network
-                Source network for the outbound NAT mapping: 10.10.0.0/16 (Hetzner Network Subent)
+                Source network for the outbound NAT mapping: 10.100.0.0/16 (Hetzner Network Subent)
                 Leave Everything As Is, Save And Apply Changes
 
 You are Now Done! You can remove the public access rules from WAN in firewall if you want to, or customize your setup with extra stuff you need.
