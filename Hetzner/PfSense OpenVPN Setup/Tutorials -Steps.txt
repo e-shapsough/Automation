@@ -1,0 +1,81 @@
+Setting Up OpenVPN With FreeRadius On PfSense
+
+- Install FreeRadius
+	- System -> Package Manager -> Available Packages -> Search for RADIUS and install "freeradius3" + Confirm
+
+- Configure FreeRadius
+	After Install Is Completed
+	- Services -> FreeRADIUS -> NAS/Clients And Add A Client
+		Client IP Address: 127.0.0.1
+		Client Shortname: Something Meaningful
+		Client Shared Secret: A Good Password (Will Need Later on)
+		Leave everything else as is and save
+
+	- Services -> FreeRADIUS -> Interfaces and Add Interface (Will Add 2 in total)
+		Interface IP Address: 127.0.0.1
+		Port: 1812
+		Interface Type: Authentication
+		IP Version: IPv4
+		Description: Radius-Auth
+	- Add Another Interface
+		Interface IP Address: 127.0.0.1
+		Port: 1813
+		Interface Type: Accounting
+		IP Version: IPv4
+		Description: Radius-Acc
+
+- Configure PfSense to use Radius Auth
+	- System -> User Manager -> Authentication Servers And Add A Server
+		Descriptive name: Something Meaningful
+		Type: RADIUS
+		Protocol: PAP
+		Hostname or IP address: 127.0.0.1
+		Shared Secret: (Use The Client Shared Secret Password From NAS/Clients Config Above)
+		Services offered: Authentication And Accounting
+		Authentication port: 1812
+		Accounting Port: 1813
+		Authentication Timeout: 30 (Or Anything you see fit)
+		RADIUS NAS IP Attribute: WAN
+		Save And FreeRadius Is Done!
+
+- Install OpenVPN Exporter (Optional, Makes it very easy to export openvpn configs for users)
+	- System -> Package Manager -> Available Packages, search for openvpn And install "openvpn-client-export" + Confirm
+
+- Configuring OpenVPN
+	- VPN -> OpenVPN -> Wizards
+		Type of Server: "RADIUS" Then Next
+		Radius Server: "Radius Server Name Added On Authentication Servers" Then Next
+		Certificate Authority: "FreeRADIUS CA" Then Next
+		Certificate: "FreeRADIUS Server Certificate" Then Next
+		Description: Something Useful
+
+		- Endpoint Configuration Section is up to you, default (leave as is) will work fine.
+
+		- Cryptographic Settings Section: Leave All as is
+
+		- Tunnel Settings Section
+			IPv4 Tunnel Network: 10.200.2000.0/24 (Or any compliant subnet that is not a part of Hetzner Network)
+			Redirect IPv4 Gateway: Activate if you want all traffic to go through the Gateway for all connected user (Even internet traffic - Not Recommended to activate)
+			IPv4 Local Network: 10.100.0.0/16 (Hetzner Network), Or (A Subnet in the network)
+			Concurrent Connections: Count Of Expected Active Users Connected
+		Leave everything else to the end as is and Next
+		
+		- Tick Firewall Rule + OpenVPN rule Then Next And Finish! You Should be all good!
+
+- Adding Users to VPN/Radius
+	- Services -> FreeRADIUS -> Users
+	- Add A User
+		Username: Name used to login to vpn (Case Sensitive)
+		Password: A Strong Password
+		Password Encryption: Cleartext-Password
+	Leave everything else as is and save.
+	To remove user acceee, Delete the user created
+	Multiple Advanced options exist for QoS, Quotas, Times ... Look through them When creating a user, Maybe you will find something useful.
+
+- Connecting A Clinet
+	- Download OpenVPN File
+		- VPN -> OpenVPN -> Client Export
+			Scroll down to "OpenVPN Clients" And download the suitable file (Most Clients Works With Most)
+			Use the file to configure open vpn on client side.
+			When Connecting, Username/Password Prompt should appear, Use The Username And Password Created In FreeRadius!
+		
