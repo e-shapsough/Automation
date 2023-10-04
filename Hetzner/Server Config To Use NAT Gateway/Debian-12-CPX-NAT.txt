@@ -34,6 +34,7 @@ runcmd:
   - ifup enp7s0
   - resolvconf --enable-updates
   - resolvconf -u
+  - IP=$(ip addr | grep 10.100 | awk '{print $2}' | rev | cut -c 4- | rev) && sed -i s/127.0.1.1/$IP/g /etc/hosts
   - chmod -x /etc/update-motd.d/*
   - apt-get update
   - apt-get upgrade -y
