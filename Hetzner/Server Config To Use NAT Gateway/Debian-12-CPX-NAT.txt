@@ -23,9 +23,17 @@ write_files:
     content: |
       network: {config: disabled}
     append: false
+  - path: /etc/resolvconf/resolv.conf.d/head
+    permissions: '0644'
+    content: |
+      nameserver 8.8.8.8
+      nameserver 8.8.4.4
+    append: false
 runcmd:
   - ifdown enp7s0
   - ifup enp7s0
+  - resolvconf --enable-updates
+  - resolvconf -u
   - chmod -x /etc/update-motd.d/*
   - apt-get update
   - apt-get upgrade -y
@@ -34,7 +42,8 @@ runcmd:
   - ufw default deny incoming
   - ufw default allow outgoing
   - ufw allow 22
-  - ufw allow from 10.100.0.0/16
+  - ufw allow from 10.100.250.0/24
+  - ufw allow from 10.100.100.250
   - echo y | ufw enable
   - systemctl enable fail2ban
   - systemctl restart fail2ban
