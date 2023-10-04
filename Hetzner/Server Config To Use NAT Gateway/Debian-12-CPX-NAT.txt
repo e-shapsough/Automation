@@ -39,13 +39,7 @@ runcmd:
   - apt-get update
   - apt-get upgrade -y
   - apt-get dist-upgrade -y
-  - apt-get install fail2ban ufw curl htop nano git nmap nfs-common wget mlocate gnupg2 software-properties-common apt-transport-https ca-certificates -y
-  - ufw default deny incoming
-  - ufw default allow outgoing
-  - ufw allow 22
-  - ufw allow from 10.100.250.0/24
-  - ufw allow from 10.100.100.250
-  - echo y | ufw enable
+  - apt-get install fail2ban curl htop nano git nmap nfs-common wget mlocate gnupg2 software-properties-common apt-transport-https ca-certificates -y
   - systemctl enable fail2ban
   - systemctl restart fail2ban
   - reboot
