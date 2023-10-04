@@ -1,0 +1,38 @@
+#cloud-config
+write_files:
+  - path: /etc/network/interfaces.d/01-nat-init
+    permissions: '0644'
+    content: |
+      auto enp7s0
+      iface enp7s0 inet dhcp
+      post-up route add -net 0.0.0.0 netmask 0.0.0.0 gw 10.100.0.1 dev enp7s0
+    append: false
+  - path: /etc/fail2ban/jail.local
+    content: |
+      [DEFAULT] 
+      ignoreip = 127.0.0.1/32
+      bantime  = 3600
+      findtime  = 300
+      maxretry = 3
+      banaction = iptables-multiport
+      backend = auto
+      [sshd] 
+      enabled = true
+    append: false
+runcmd:
+  - echo "network: {config: disabled}" > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+  - ifdown enp7s0
+  - ifup enp7s0
+  - chmod -x /etc/update-motd.d/*
+  - apt-get update
+  - apt-get upgrade -y
+  - apt-get dist-upgrade -y
+  - apt-get install fail2ban ufw curl htop nano git nmap nfs-common wget mlocate gnupg2 software-properties-common apt-transport-https ca-certificates -y
+  - ufw default deny incoming
+  - ufw default allow outgoing
+  - ufw allow 22
+  - ufw allow from 10.100.0.0/16
+  - echo y | ufw enable
+  - systemctl enable fail2ban
+  - systemctl restart fail2ban
+  - reboot
