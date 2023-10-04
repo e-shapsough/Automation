@@ -19,8 +19,11 @@ write_files:
       [sshd] 
       enabled = true
     append: false
+  - path: /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+    content: |
+      network: {config: disabled}
+    append: false
 runcmd:
-  - echo "network: {config: disabled}" > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
   - ifdown enp7s0
   - ifup enp7s0
   - chmod -x /etc/update-motd.d/*
